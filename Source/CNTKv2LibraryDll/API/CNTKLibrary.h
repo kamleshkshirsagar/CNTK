@@ -3318,20 +3318,20 @@ namespace CNTK
     class TrainingParameterPerUnitSchedule : public TrainingParameterSchedule<T>
     {
     public:
-        TrainingParameterPerUnitSchedule(double value) 
+        TrainingParameterPerUnitSchedule(T value)
             : TrainingParameterSchedule<T>::TrainingParameterSchedule(value, U)
         { }
         
-        TrainingParameterPerUnitSchedule(const std::vector<double>& schedule, size_t epochSize = 1) 
+        TrainingParameterPerUnitSchedule(const std::vector<T>& schedule, size_t epochSize = 1) 
             : TrainingParameterSchedule<T>::TrainingParameterSchedule(schedule, U, epochSize)
         { }
         
-        TrainingParameterPerUnitSchedule(const std::vector<std::pair<size_t, double>>& schedule, size_t epochSize = 1) 
+        TrainingParameterPerUnitSchedule(const std::vector<std::pair<size_t, T>>& schedule, size_t epochSize = 1) 
             : TrainingParameterSchedule<T>::TrainingParameterSchedule(schedule, U, epochSize)
         { }
 
 #ifdef SWIG // for Python interop (adds indexer)
-        const double __getitem__(size_t count) const
+        const T __getitem__(size_t count) const
         {
             return TrainingParameterSchedule<T>::operator[](count);
         }
@@ -3358,7 +3358,7 @@ namespace CNTK
     typedef TrainingParameterPerSampleSchedule<double> MomentumPerSampleSchedule;
     typedef TrainingParameterPerMinibatchSchedule<double> MomentumPerMinibatchSchedule;
 
-    typedef TrainingParameterSchedule<size_t> MinibatchSizeSchedule;
+    typedef TrainingParameterPerSampleSchedule<size_t> MinibatchSizeSchedule;
 
     ///
     /// This class allows to specify momentum as time constant in place of momentum per sample in 
@@ -4102,36 +4102,57 @@ namespace CNTK
     class TrainingSession
     {
     public:
-        CNTK_API TrainingSession(const MinibatchSourcePtr& trainingSource,
+        CNTK_API TrainingSession(
+            const MinibatchSourcePtr& trainingSource,
             const TrainerPtr& trainer,
             const std::unordered_map<Variable, StreamInformation>& modelInputToMinibatchSourceStream,
+            const TrainingParameterPerUnitSchedule<size_t, TrainingParameterSchedule<size_t>::UnitType::Sample>& minibatchSizeSchedule,
             size_t checkpointFrequencyInSamples,
             const std::wstring& checkPointFileName);
 
         ///
         /// Runs the session.
         ///
-        CNTK_API virtual void Run(const DeviceDescriptor& computeDevice);
+        CNTK_API void Run(const DeviceDescriptor& computeDevice);
 
         ///
         /// Restores a session from a checkpoint.
         ///
-        CNTK_API virtual void RestoreFromCheckpoint(const std::wstring& checkpointFileName);
+        CNTK_API void RestoreFromCheckpoint(const std::wstring& checkpointFileName);
 
-        virtual ~TrainingSession() {}
+        CNTK_API virtual ~TrainingSession() {}
 
-    protected:
+    public:
         //
-        // Called each time before a new minibatch is requested from the minibatch source
+        // Optionally overridable, called each time before a new minibatch is requested from the minibatch source
         // during training (from Run method).
         //
-        virtual size_t GetMinibatchSize() = 0;
+        virtual size_t GetMinibatchSize()
+        {
+            return m_minibatchSizeSchedule[Trainer()->TotalNumberOfSamplesSeen()];
+        }
 
         //
         // Optionally overridable callback that is invoked before each minibatch.
         //
-        virtual void OnMinibatchStart() {};
+        CNTK_API virtual void OnMinibatchStart() {};
 
+        //
+        // Optionally overridable callback that is invoked after each minibatch.
+        //
+        CNTK_API virtual void OnMinibatchEnd() {};
+
+        //
+        // Optionally overridable callback that is invoked before each minibatch.
+        //
+        CNTK_API virtual void OnCheckpointStart() {};
+
+        //
+        // Optionally overridable callback that is invoked before each minibatch.
+        //
+        CNTK_API virtual void OnCheckpointEnd() {};
+
+    protected:
         //
         // Accessors.
         //
@@ -4158,12 +4179,14 @@ namespace CNTK
         size_t m_parallelAfterSamples;
         size_t m_workerRank;
         size_t m_numberOfWorkers;
+        const MinibatchSizeSchedule m_minibatchSizeSchedule;
     };
 
-    CNTK_API TrainingSessionPtr CreateBasicTrainingSession(const MinibatchSourcePtr& trainingSource,
+    CNTK_API TrainingSessionPtr CreateBasicTrainingSession(
+        const MinibatchSourcePtr& trainingSource,
         const TrainerPtr& trainer,
         const std::unordered_map<Variable, StreamInformation>& modelInputToMinibatchSourceStream,
-        const MinibatchSizeSchedule& minibatchSizeSchedule,
+        const TrainingParameterPerUnitSchedule<size_t, TrainingParameterSchedule<size_t>::UnitType::Sample>& minibatchSizeSchedule,
         size_t checkpointFrequencyinSamples,
         const std::wstring& checkPointFileName);
 }

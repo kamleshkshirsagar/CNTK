@@ -35,17 +35,12 @@ def run_cifar_convnet_distributed():
     #force_deterministic_algorithms()
     # TODO: do the above; they lead to slightly different results, so not doing it for now
 
-    create_train_reader = lambda data_size: create_reader(os.path.join(base_path, 'train_map.txt'), os.path.join(base_path, 'CIFAR-10_mean.xml'), True, data_size, 0)
-    test_reader = create_reader(os.path.join(base_path, 'test_map.txt'), os.path.join(base_path, 'CIFAR-10_mean.xml'), False, FULL_DATA_SWEEP)
+    train_data = os.path.join(base_path, 'train_map.txt')
+    mean_data = os.path.join(base_path, 'CIFAR-10_mean.xml')
+    test_data = os.path.join(base_path, 'test_map.txt')
 
-    distributed_after_samples = 0
     num_quantization_bits = 32
-    create_dist_learner = lambda learner: distributed.data_parallel_distributed_learner(
-        learner=learner,
-        num_quantization_bits=num_quantization_bits,
-        distributed_after=distributed_after_samples)
-
-    return convnet_cifar10_dataaug(create_train_reader, test_reader, create_dist_learner, max_epochs=1, num_mbs_per_log=None)
+    return convnet_cifar10_dataaug(train_data, test_data, mean_data, num_quantization_bits, max_epochs=1, num_mbs_per_log=None)
 
 if __name__=='__main__':
     assert distributed.Communicator.rank() < distributed.Communicator.num_workers()

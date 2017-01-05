@@ -56,7 +56,7 @@ namespace
             minibatchSource,
             trainer,
             { { classifier.features, featureStreamInfo }, { classifier.labels, labelStreamInfo } },
-            MinibatchSizeSchedule(minibatchSize, MinibatchSizeSchedule::UnitType::Sample),
+            MinibatchSizeSchedule(minibatchSize),
             checkpointFrequency,
             L"test");
 

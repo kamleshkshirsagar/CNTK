@@ -3093,6 +3093,19 @@ namespace CNTK
                                  const std::wstring& name = L"");
 
     ///
+    /// Create an instance of the CNTK built-in Unpooling operation on specified tensor input operands with the specified type and shape
+    ///
+    CNTK_API FunctionPtr Unpooling(const Variable& operand,
+                                   const Variable& poolingInput,
+                                   PoolingType UnpoolingType,
+                                   const NDShape& UnpoolingWindowShape,
+                                   const NDShape& strides = { 1 },
+                                   const std::vector<bool>& autoPadding = { false },
+                                   const NDShape& lowerPad = { 0 },
+                                   const NDShape& upperPad = { 0 },
+                                   const std::wstring& name = L"");
+
+    ///
     /// TODO:
     ///
     // TODO: Do we need a separate "spatial" parameter or can it be inferred from the tensor dimensions
@@ -3105,7 +3118,7 @@ namespace CNTK
                                             double normalizationTimeConstant = 0,
                                             double blendTimeConstant = 0,
                                             double epsilon = 0.00001,
-                                            bool useCuDNNEngine = false,
+                                            bool useCuDNNEngine = true,
                                             const std::wstring& name = L"");
 
     /// Create an instance of the CNTK built-in OptimizedRNNStack operation on specified input operands

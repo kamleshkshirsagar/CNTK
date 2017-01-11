@@ -2196,8 +2196,7 @@ void SGD<ElemType>::UpdateWeights(Matrix<ElemType>& functionValues, Matrix<ElemT
                                     (ElemType) learnRatePerSample, (ElemType) momentum, useNesterovMomentum);
     }
     else if (adpType == GradientsUpdateType::AdaGrad ||
-             (adpType == GradientsUpdateType::RmsProp && gradientValues.GetMatrixType() == MatrixType::SPARSE) ||
-             (adpType == GradientsUpdateType::FSAdaGrad && gradientValues.GetMatrixType() == MatrixType::SPARSE))
+             (adpType == GradientsUpdateType::RmsProp && gradientValues.GetMatrixType() == MatrixType::SPARSE))
     {
         // rmsprop for sparse is not implemented yet, delegate it with adagrad
 

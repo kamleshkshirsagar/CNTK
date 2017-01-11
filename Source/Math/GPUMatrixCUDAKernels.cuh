@@ -40,6 +40,10 @@
 #define CUDA_LONG int32_t
 #endif
 
+// special markers in BlockId2ColOrRow()/ColOrRow2BlockId()
+static const GPUSPARSE_INDEX_TYPE Id_NotAssigned = -1;
+static const GPUSPARSE_INDEX_TYPE Id_Pending = INT_MAX;
+
 #define IDX2C(i, j, ld) (((j) * (ld)) + (i)) // 0 based indexing
 
 // On older GPUs, CUDA atomicAdd() only exists for 'float'. This is the 'double' version.
@@ -1423,6 +1427,51 @@ __global__ void _fsadagrad(CUDA_LONG size, ElemType* grad, ElemType* smoothAda, 
     for (; idx < size; idx += stride)
     {
         ElemType g = grad[idx];
+        ElemType adaSqr = adaWeight * smoothAda[idx] + (1.0f - adaWeight) * g * g;
+        smoothAda[idx] = adaSqr;
+        if (adaSqr != 0.0f)
+        {
+            ElemType w;
+            if (sizeof(ElemType) == sizeof(double))
+            {
+                w = adaMul * rsqrt(adaSqr);
+            }
+            else
+            {
+                w = adaMul * rsqrtf(adaSqr);
+            }
+
+            if (w > 10.0f)
+                w = 10.0f;
+            g *= w;
+        }
+
+        if (mom > 0.0f)
+        {
+            g = mom * smoothMom[idx] + (1.0f - mom) * g;
+            smoothMom[idx] = g;
+        }
+
+        g *= lr;
+        val[idx] -= g;
+    }
+}
+
+template <class ElemType>
+__global__ void _fsadagrad4BlockSparseCol(CUDA_LONG size, 
+    ElemType* grad_bsc, const GPUSPARSE_INDEX_TYPE* colOrRow2blockId, const size_t len,
+    ElemType* smoothAda, ElemType* smoothMom, ElemType* val,
+    ElemType lr, ElemType mom, ElemType adaWeight, ElemType adaMul)
+{
+    CUDA_LONG idx = blockIdx.x * blockDim.x + threadIdx.x;
+    CUDA_LONG stride = blockDim.x * gridDim.x;
+    for (; idx < size; idx += stride)
+    {
+        CUDA_LONG col = idx / len;
+        CUDA_LONG row = idx - col * len;
+        CUDA_LONG blockid = colOrRow2blockId[col];
+
+        ElemType g = (blockid == Id_NotAssigned) ? 0 : grad_bsc[blockid * len + row];
         ElemType adaSqr = adaWeight * smoothAda[idx] + (1.0f - adaWeight) * g * g;
         smoothAda[idx] = adaSqr;
         if (adaSqr != 0.0f)
@@ -3007,10 +3056,6 @@ __global__ void _reshape(
     if (currentCol == (newNumCols - 1))
         newColumnIndex[newNumCols] = oldColumnIndex[oldNumCols]; // set end pointer
 }
-
-// special markers in BlockId2ColOrRow()/ColOrRow2BlockId()
-static const GPUSPARSE_INDEX_TYPE Id_NotAssigned = -1;
-static const GPUSPARSE_INDEX_TYPE Id_Pending = INT_MAX;
 
 //called before _determineBlockIds and _denseMulSparseCSCTransposeToSparseBlockCol to determine which columns have values and
 //what's the mapping from the column id in the resulted SparseBlockCol format to the column id in the dense format

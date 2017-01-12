@@ -486,9 +486,9 @@ BOOST_FIXTURE_TEST_CASE(GPUSparseMatrix1DConvolutionFixedInit, RandomSeedFixture
     GPUMatrix<float> denseMatrixB(l, n, 0, values, matrixFlagNormal);
     ;
     GPUSparseMatrix<float> sparseMatrixB(c_deviceIdZero, matrixFormatSparseCSC);
-    GPUMatrix<float> denseMatrixTemp(1, 1, c_deviceIdZero);  // this should get resized automatically
-    GPUMatrix<float> resultMatrixBase(1, 1, c_deviceIdZero); // this should get resized automatically
-    GPUMatrix<float> resultMatrixExp(1, 1, c_deviceIdZero);  // this should get resized automatically
+    GPUMatrix<float> denseMatrixTemp(c_deviceIdZero);  // this should get resized automatically
+    GPUMatrix<float> resultMatrixBase(c_deviceIdZero); // this should get resized automatically
+    GPUMatrix<float> resultMatrixExp(c_deviceIdZero);  // this should get resized automatically
 
     sparseMatrixB.SetValue(denseMatrixB);
 

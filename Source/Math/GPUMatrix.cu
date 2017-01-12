@@ -3370,7 +3370,16 @@ void GPUMatrix<ElemType>::MultiplyAndWeightedAdd(ElemType alpha, const GPUMatrix
     int k = int(transposeA ? a.m_numRows : a.m_numCols);
     int l = int(transposeB ? b.m_numCols : b.m_numRows);
 
-    c.RequireSize(m, n);
+    if (c.m_numRows != m || c.m_numCols != n)
+    {
+        if (c.m_numRows == 0 || c.m_numCols == 0)
+        {
+            c.RequireSize(m, n);
+            c.SetValue(0.0);
+        }
+        else
+            RuntimeError("Accumulation matrix dim mismatch in MultiplyAndWeightedAdd");
+    }
 
     if (!(m > 0 && k > 0 && l > 0 && n > 0))
         RuntimeError("!(m>0 && k>0 && l>0 && n>0)"); // converting from size_t to int may cause overflow

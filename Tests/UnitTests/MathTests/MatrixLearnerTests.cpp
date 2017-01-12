@@ -41,7 +41,6 @@ BOOST_FIXTURE_TEST_CASE(FSAdagradTest, RandomSeedFixture)
     SingleMatrix matG2 = SingleMatrix::RandomGaussian(dim1, dim3, c_deviceIdZero, -1.0f, 1.0f, IncrementCounter());
 
     SingleMatrix matG(c_deviceIdZero);
-    matG.SetValue(0.0);
     SingleMatrix::MultiplyAndAdd(matG2, false, matG1, true, matG);
 
     SingleMatrix matGsparseBSC(c_deviceIdZero);

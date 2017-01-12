@@ -76,9 +76,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\Examples\Evaluation\CNTKLibraryManagedExamples\Program.cs">
-      <Link>Program.cs</Link>
+    <Compile Include="..\..\..\..\Examples\Evaluation\CNTKLibraryManagedExamples\CNTKLibraryManagedExamples.cs">
+      <Link>CNTKLibraryManagedExamples.cs</Link>
     </Compile>
+    <Compile Include="program.cs" />
   </ItemGroup>
   <Target Name="Build" Condition="!Exists('$(SWIG_PATH)\swig.exe')">
     <Warning Condition="!Exists('$(SWIG_PATH)\swig.exe')" Text="The project requires SWIG to be installed." />

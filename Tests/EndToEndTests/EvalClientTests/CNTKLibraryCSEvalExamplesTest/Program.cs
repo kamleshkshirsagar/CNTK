@@ -1,4 +1,11 @@
-﻿using System;
+﻿//
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE.md file in the project root for full license information.
+//
+// Program.cs -- Tests of CNTK Library C# Eval examples.
+//
+
+using System;
 using CNTK;
 
 namespace CNTKLibraryCSEvalExamples

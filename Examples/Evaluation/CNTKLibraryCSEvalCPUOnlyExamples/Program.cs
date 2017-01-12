@@ -14,7 +14,7 @@ namespace CNTKLibraryCSEvalExamples
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("======== Evaluate model using C# ========");
+            Console.WriteLine("======== Evaluate model using C# CPUOnly Build ========");
 
             CNTKLibraryManagedExamples.EvaluationSingleImage(DeviceDescriptor.CPUDevice);
             CNTKLibraryManagedExamples.EvaluationBatchOfImages(DeviceDescriptor.CPUDevice);

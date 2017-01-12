@@ -2,7 +2,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE.md file in the project root for full license information.
 //
-// CNTKprogram.cs -- Example for using C# Eval V2 API.
+// CNTKLibraryCSExamples.cs -- Examples for using CNTK Library C# Eval API.
 //
 
 using System;
@@ -12,7 +12,7 @@ using System.IO;
 using System.Linq;
 using CNTK;
 
-namespace CNTKLibraryManagedExamples
+namespace CNTKLibraryCSExamples
 {
     public class CNTKLibraryManagedExamples
     {

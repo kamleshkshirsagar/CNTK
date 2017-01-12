@@ -76,7 +76,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\Examples\Evaluation\CNTKLibraryCSExamples\CNTKLibraryCSExamples.cs">
+    <Compile Include="..\..\..\..\Examples\Evaluation\CNTKLibraryCSEvalCPUOnlyExamples\CNTKLibraryCSExamples.cs">
       <Link>CNTKLibraryCSExamples.cs</Link>
     </Compile>
     <Compile Include="program.cs" />

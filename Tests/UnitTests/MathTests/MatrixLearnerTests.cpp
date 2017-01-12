@@ -50,7 +50,7 @@ BOOST_FIXTURE_TEST_CASE(FSAdagradTest, RandomSeedFixture)
 
     // copy mGsparse to dense and compare
     Matrix<float> matGdense = Matrix<float>::Zeros(dim1, dim2, c_deviceIdZero);
-    Matrix<float>::ScaleAndAdd(1, matGdense, matGsparseBSC);
+    Matrix<float>::ScaleAndAdd(1, matGsparseBSC, matGdense);
 
     BOOST_CHECK(matG.IsEqualTo(matGdense, c_epsilonFloatE5));
 

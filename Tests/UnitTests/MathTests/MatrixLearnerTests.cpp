@@ -47,7 +47,7 @@ BOOST_FIXTURE_TEST_CASE(FSAdagradTest, RandomSeedFixture)
     matGsparseBSC.SwitchToMatrixType(MatrixType::SPARSE, matrixFormatSparseBlockCol, false);
     SingleMatrix::MultiplyAndAdd(matG2, false, matG1sparseCSC, true, matGsparseBSC);
 
-    // copy mGsparse to dense and compare
+    // copy matGsparse to matGdense and compare with matG
     Matrix<float> matGdense = Matrix<float>::Zeros(dim1, dim2, c_deviceIdZero);
     Matrix<float>::ScaleAndAdd(1, matGsparseBSC, matGdense);
 
@@ -59,18 +59,6 @@ BOOST_FIXTURE_TEST_CASE(FSAdagradTest, RandomSeedFixture)
 
     smoothedCount = 1000;
     matSGsparse.FSAdagradUpdate(dim2, matGsparseBSC, matMsparse, smoothedCount, 0.0001, 1.0, 0.9, 0.9);
-
-    File fdump0("dump0.txt", fileOptionsWrite | fileOptionsText);
-    fdump0 << "\nmatG\n" << matG;
-    fdump0 << "\nmatSG\n" << matSG;
-    fdump0 << "\nmatM\n" << matM;
-    fdump0.Flush();
-
-    File fdump1("dump1.txt", fileOptionsWrite | fileOptionsText);
-    fdump1 << "\nmatGsparse\n" << matGdense;
-    fdump1 << "\nmatSGsparse\n" << matSGsparse;
-    fdump1 << "\nmatMsparse\n" << matMsparse;
-    fdump1.Flush();
 
     BOOST_CHECK(matSG.IsEqualTo(matSGsparse, c_epsilonFloatE5));
     BOOST_CHECK(matM.IsEqualTo(matMsparse, c_epsilonFloatE5));

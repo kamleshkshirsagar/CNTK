@@ -6318,6 +6318,13 @@ Test module "MathTests" has passed with:
     Test case "GPUMatrixSuite/MatrixSparseElementWisePower" has passed with:
       1 assertion out of 1 passed
 
+  Test suite "MatrixLearnerTests" has passed with:
+     1 test case out of 1 passed
+     2 assertions out of 2 passed
+ 
+     Test case "MatrixLearnerTests/FSAdagradTest" has passed with:
+       2 assertions out of 2 passed
+ 
   Test suite "MatrixUnitTests" has passed with:
     26 test cases out of 26 passed
     4048755 assertions out of 4048755 passed

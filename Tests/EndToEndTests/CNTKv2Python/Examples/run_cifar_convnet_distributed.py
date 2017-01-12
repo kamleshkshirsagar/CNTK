@@ -14,7 +14,7 @@ from cntk.device import set_default_device, gpu
 
 abs_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(abs_path, "..", "..", "..", "..", "Examples", "Image", "Classification", "ConvNet", "Python"))
-from ConvNet_CIFAR10_DataAug_Distributed import convnet_cifar10_dataaug, create_reader
+from ConvNet_CIFAR10_DataAug_Distributed import convnet_cifar10_dataaug
 
 def run_cifar_convnet_distributed():
     try:
@@ -40,7 +40,7 @@ def run_cifar_convnet_distributed():
     test_data = os.path.join(base_path, 'test_map.txt')
 
     num_quantization_bits = 32
-    return convnet_cifar10_dataaug(train_data, test_data, mean_data, num_quantization_bits, max_epochs=1, num_mbs_per_log=None)
+    return convnet_cifar10_dataaug(train_data, test_data, mean_data, num_quantization_bits, max_epochs=2, num_mbs_per_log=1)
 
 if __name__=='__main__':
     assert distributed.Communicator.rank() < distributed.Communicator.num_workers()

@@ -55,6 +55,16 @@ BOOST_FIXTURE_TEST_CASE(FSAdagradTest, RandomSeedFixture)
     smoothedCount = 1000;
     matSGsparse.FSAdagradUpdate(dim2, matGsparseBSC, matMsparse, smoothedCount, 0.0001, 1.0, 0.9, 0.9);
 
+    File fdump0("dump0.txt", fileOptionsWrite | fileOptionsText);
+    fdump0 << "\nmatSG\n" << matSG;
+    fdump0 << "\nmatM\n" << matM;
+    fdump0.Flush();
+
+    File fdump1("dump1.txt", fileOptionsWrite | fileOptionsText);
+    fdump1 << "\nmatSGsparse\n" << matSGsparse;
+    fdump1 << "\nmatMsparse\n" << matMsparse;
+    fdump1.Flush();
+
     BOOST_CHECK(matSG.IsEqualTo(matSGsparse, c_epsilonFloatE5));
     BOOST_CHECK(matM.IsEqualTo(matMsparse, c_epsilonFloatE5));
 }

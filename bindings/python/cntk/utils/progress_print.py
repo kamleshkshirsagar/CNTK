@@ -65,7 +65,7 @@ class ProgressPrinter(object):
             self.logfilename = self.log_to_file
 
             if self.rank != None:
-                self.logfilename = self.logfilename + "rank" + str(self.global_rank)
+                self.logfilename = self.logfilename + 'rank' + str(self.rank)
 
             # print to stdout
             print("Redirecting log to file " + self.logfilename)

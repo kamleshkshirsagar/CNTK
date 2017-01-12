@@ -11,6 +11,8 @@ import argparse
 import numpy as np
 import cntk
 import _cntk_py
+
+from cntk.utils import *
 from cntk.distributed import data_parallel_distributed_learner, Communicator
 
 # default Paths relative to current python file.
@@ -156,7 +158,7 @@ def convnet_cifar10_dataaug(train_data, test_data, mean_data, num_quantization_b
 
     epoch_size = 50000
 
-    progress_printer = cntk.utils.ProgressPrinter(
+    progress_printer = ProgressPrinter(
         freq=num_mbs_per_log,
         tag='Training',
         log_to_file=log_to_file,

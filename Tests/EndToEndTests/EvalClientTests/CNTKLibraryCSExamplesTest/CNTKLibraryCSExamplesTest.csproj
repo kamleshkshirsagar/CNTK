@@ -14,8 +14,8 @@
     <Prefer32Bit>false</Prefer32Bit>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CNTKLibraryManagedExamplesTest</RootNamespace>
-    <AssemblyName>CNTKLibraryManagedExamplesTest</AssemblyName>
+    <RootNamespace>CNTKLibraryCSExamples</RootNamespace>
+    <AssemblyName>CNTKLibraryCSExamplesTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -76,8 +76,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\Examples\Evaluation\CNTKLibraryManagedExamples\CNTKLibraryManagedExamples.cs">
-      <Link>CNTKLibraryManagedExamples.cs</Link>
+    <Compile Include="..\..\..\..\Examples\Evaluation\CNTKLibraryCSExamples\CNTKLibraryCSExamples.cs">
+      <Link>CNTKLibraryCSExamples.cs</Link>
     </Compile>
     <Compile Include="program.cs" />
   </ItemGroup>

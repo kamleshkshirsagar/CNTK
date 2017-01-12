@@ -65,7 +65,7 @@ def create_resnet_network(network_name):
 
 
 # Create trainer
-def create_trainer(network, minibatch_size, epoch_size, num_quntization_bits):
+def create_trainer(network, minibatch_size, epoch_size, num_quantization_bits):
     if network['name'] == 'resnet20': 
         lr_per_mb = [1.0]*80+[0.1]*40+[0.01]
     elif network['name'] == 'resnet110': 
@@ -94,15 +94,6 @@ def create_trainer(network, minibatch_size, epoch_size, num_quntization_bits):
 # Train and test
 def train_and_test(network, trainer, train_source, test_source, progress_printer, minibatch_size, epoch_size):
 
-    # shared training parameters 
-    epoch_size = 50000                    # for now we manually specify epoch size
-    
-    # NOTE: scaling up minibatch_size increases sample throughput. In 8-GPU machine,
-    # ResNet110 samples-per-second is ~7x of single GPU, comparing to ~3x without scaling
-    # up. However, bigger minimatch size on the same number of samples means less updates, 
-    # thus leads to higher training error. This is a trade-off of speed and accuracy
-    minibatch_size = 128 * (Communicator.num_workers() if scale_up else 1)
-
     # define mapping from intput streams to network inputs
     input_map = {
         network['feature']: train_source.streams.features,
@@ -127,7 +118,7 @@ def train_and_test(network, trainer, train_source, test_source, progress_printer
         data = test_source.next_minibatch(minibatch_size, input_map=input_map)
         if not data: break;
 
-        local_mb_samples=data[label_var].num_samples
+        local_mb_samples=data[network['label']].num_samples
         metric_numer += trainer.test_minibatch(data) * local_mb_samples
         metric_denom += local_mb_samples
         minibatch_index += 1
@@ -140,7 +131,7 @@ def train_and_test(network, trainer, train_source, test_source, progress_printer
 
 
 # Train and evaluate the network.
-def resnet_cifar10(train_data, test_data, mean_data, network_name, num_quantization_bits=32, max_epochs=2, log_to_file=None, num_mbs_per_log=None, gen_heartbeat=False, scale_up=False):
+def resnet_cifar10(train_data, test_data, mean_data, network_name, num_quantization_bits=32, max_epochs=5, log_to_file=None, num_mbs_per_log=None, gen_heartbeat=False, scale_up=False):
 
     set_computation_network_trace_level(0)
 
@@ -164,7 +155,7 @@ def resnet_cifar10(train_data, test_data, mean_data, network_name, num_quantizat
     trainer = create_trainer(network, minibatch_size, epoch_size, num_quantization_bits)
     train_source = create_image_mb_source(train_data, mean_data, train=True, total_number_of_samples=max_epochs * epoch_size)
     test_source = create_image_mb_source(test_data, mean_data, train=False, total_number_of_samples=cntk.io.FULL_DATA_SWEEP)
-    train_and_test(network, trainer, train_source, test_source, progress_printer, minibatch_size, epoch_size)
+    return train_and_test(network, trainer, train_source, test_source, progress_printer, minibatch_size, epoch_size)
 
 
 if __name__=='__main__':

@@ -7,7 +7,7 @@
     <ProjectGuid>{307E5BAC-DA03-45D2-ADEC-FE6620090109}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CNTKLibraryCSExamples</RootNamespace>
+    <RootNamespace>CNTKLibraryCSEvalExamples</RootNamespace>
     <AssemblyName>CNTKLibraryCSEvalGPUExamples</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -48,8 +48,8 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CNTKLibraryCSEvalCPUOnlyExamples\CNTKLibraryCSExamples.cs">
-      <Link>CNTKLibraryCSExamples.cs</Link>
+    <Compile Include="..\CNTKLibraryCSEvalCPUOnlyExamples\CNTKLibraryCSEvalExamples.cs">
+      <Link>CNTKLibraryCSEvalExamples.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

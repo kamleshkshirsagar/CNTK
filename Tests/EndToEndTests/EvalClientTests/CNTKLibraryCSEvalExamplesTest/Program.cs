@@ -1,7 +1,7 @@
 ﻿using System;
 using CNTK;
 
-namespace CNTKLibraryCSExamples
+namespace CNTKLibraryCSEvalExamples
 {
     class program
     {

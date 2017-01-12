@@ -75,7 +75,7 @@
     <ClCompile Include="BlockTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Examples\Evaluation\CNTKLibraryCPPExamples\EvalMultithreads.cpp">
+    <ClCompile Include="..\..\..\Examples\Evaluation\CNTKLibraryCPPEvalExamples\EvalMultithreads.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

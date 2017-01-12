@@ -2,13 +2,13 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE.md file in the project root for full license information.
 //
-// program.cs -- Example for using CNTK Library C# Eval CPUOnly Nuget Package.
+// Program.cs -- Example for using CNTK Library C# Eval CPUOnly Nuget Package.
 //
 
 using System;
 using CNTK;
 
-namespace CNTKLibraryCSExamples
+namespace CNTKLibraryCSEvalExamples
 {
     class Program
     {
